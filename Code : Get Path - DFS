@@ -1,0 +1,67 @@
+#include <iostream>
+#include<bits/stdc++.h>
+using namespace std;
+vector<int>  getPathDFS(int **edges,int v1,int v2,int V,bool *visited){
+	vector<int> v;
+	if(v1==v2){
+		v.push_back(v2);
+		visited[v2] = true;
+		return v;
+	}
+	visited[v1] = true;
+	for(int i=0;i<V;i++){
+		if(edges[v1][i]==1){
+			if(!visited[i]){
+				v = getPathDFS(edges,i,v2,V,visited);
+				if(!v.empty()){
+					if(i==v2)
+						break;
+					else{
+						visited[i] = true;
+						v.push_back(i);
+						break;	
+					}
+					
+				}
+			}
+		}
+	}
+	return v;
+}
+
+int main()
+{
+  int V, E, tempX, tempY;
+  cin >> V >> E;
+
+  /*
+
+  	   Write Your Code Here
+	   Complete the Rest of the Program
+	   You have to Print the output yourself
+	 
+  */
+   int **edges = new int*[V];
+   for(int i=0;i<V;i++){
+       edges[i] = new int[V];
+   } 
+  for(int i=0;i<E;i++){
+      int f,s;
+      cin>>f>>s;
+      edges[f][s] = 1;
+      edges[s][f] = 1;
+  }
+  bool *visited = new bool[V];
+  memset(visited,false,V*sizeof(bool));
+  int s,e;
+  cin>>s>>e; 
+  vector<int> v;
+	v = getPathDFS(edges,s,e,V,visited);
+	if(!v.empty()){
+		v.push_back(s);
+		for(int i=0;i<v.size();i++){
+		cout<<v[i]<<" ";
+	}
+	}  
+  return 0;
+}
