@@ -1,0 +1,73 @@
+#include <iostream>
+#include<bits/stdc++.h>
+using namespace std;
+void getPathBFS(int **edges,int v1,int v2,int V){
+	queue <int> remainingVertices;
+	remainingVertices.push(v1);
+	bool *visited = new bool[V];
+	memset(visited,false,V*sizeof(bool));
+	visited[v1] = true;
+	map<int,int> m;
+	bool flag = false;
+	while(!remainingVertices.empty()){
+		
+		int d = remainingVertices.front();
+		remainingVertices.pop();
+			
+		for(int i=0;i<V;i++){
+			if(visited[i]){
+			continue;
+			}
+			if(edges[d][i]==1){
+			remainingVertices.push(i);
+			visited[i] = true;
+			m[i] = d;
+			if(i==v2)
+            {
+                flag = true;
+				break;
+            }
+			}	
+		
+		}	
+	}
+	if(flag){
+		int i = v2;
+		while(1){
+			
+			cout<<i<<" ";
+			if(i==v1)
+				break;
+			i = m[i];
+			
+		}			
+	}	
+}
+
+int main()
+{
+  int V, E, tempX, tempY;
+  cin >> V >> E;
+
+  /*
+
+  	   Write Your Code Here
+	   Complete the Rest of the Program
+	   You have to Print the output yourself
+	 
+  */
+int **edges = new int*[V];
+	for(int i=0;i<V;i++){
+		edges[i] = new int[V];
+	}	
+	for(int i=0;i<E;i++){
+		int f,s;
+		cin>>f>>s;
+		edges[f][s] = 1;
+		edges[s][f] = 1;
+	}
+   int s,e;
+   cin>>s>>e;
+getPathBFS(edges,s,e,V);
+    return 0;
+}
