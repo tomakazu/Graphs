@@ -1,0 +1,69 @@
+#include <iostream>
+using namespace std;
+#include<bits/stdc++.h>
+vector< vector<int> > AllComponents(int **edges,bool *visited,int V){
+	vector< vector<int> >  v;
+	for(int i=0;i<V;i++){
+		vector<int> curr_graph;
+		queue<int> curr_vertices;
+		int d = i;
+		if(!visited[d]){
+			//cout<<d<<" ";
+			curr_vertices.push(d);
+			curr_graph.push_back(d);
+			visited[d] = true;
+		}
+		while(!curr_vertices.empty()){
+			d = curr_vertices.front();
+			curr_vertices.pop();
+			for(int j=0;j<V;j++){
+				if(edges[j][d]==1&&!visited[j]){
+					curr_vertices.push(j);
+					curr_graph.push_back(j);
+					visited[j] = true;
+				}
+			}
+		}
+		v.push_back(curr_graph);
+		
+	}
+	return v;
+}
+int main()
+{
+  int V, E, tempX, tempY;
+  cin >> V >> E;
+
+  /*
+
+  	   Write Your Code Here
+	   Complete the Rest of the Program
+	   You have to Print the output yourself
+	 
+  */
+ int**edges = new int*[V];
+   for(int i=0;i<V;i++){
+       edges[i] = new int[V];
+   } 
+   for(int i=0;i<E;i++){
+       int f,s;
+       cin>>f>>s;
+       edges[f][s] = 1;
+       edges[s][f] = 1;
+   }   
+    bool *visited = new bool[V];
+	memset(visited,false,V*sizeof(bool));
+    vector< vector<int> > v;
+	v =  AllComponents(edges,visited,V);
+	for(int i=0;i<v.size();i++){
+		if(v[i].empty())
+			continue;
+		sort(v[i].begin(),v[i].begin()+v[i].size());
+        for(int j=0;j<v[i].size();j++){
+			
+            cout<<v[i][j]<<" ";
+		}
+		cout<<endl;
+	}
+    return 0;
+}
