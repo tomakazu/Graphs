@@ -1,0 +1,62 @@
+#include <iostream>
+#include<queue>
+#include<bits/stdc++.h>
+using namespace std;
+bool hasPath(int **edges,int v1,int v2,int v){
+    bool *visited = new bool[v];
+    memset(visited,false,v*sizeof(bool));
+    queue<int> vertices;
+    visited[v1] = true;
+    vertices.push(v1);
+    while(!vertices.empty()){
+        v1 = vertices.front();
+        vertices.pop();
+        for(int i=0;i<v;i++){
+            if(edges[v1][i]==1){
+				 if(visited[i]){
+                     continue;
+                 }
+                 if(i==v2){
+                    return true;
+                 }   
+                visited[i] = true;
+				vertices.push(i);
+            }
+        }
+        
+        
+    }
+    return false;
+}
+int main() {
+    int V, E;
+    cin >> V >> E;
+
+  /*
+
+  	   Write Your Code Here
+	   Complete the Rest of the Program
+	   You have to take input and print the output yourself
+	 
+  */
+   int **edges = new int*[V];
+   for(int i=0;i<V;i++){
+       edges[i] = new int[V];
+   }
+   for(int j=0;j<E;j++){
+        int f,s;
+        cin>>f>>s;
+        edges[f][s] = 1;
+        edges[s][f] = 1;
+     }
+   int v1,v2;
+   cin>>v1>>v2; 
+   bool value = hasPath(edges,v1,v2,V); 
+   if(value){
+       cout<<"true";
+   }
+   else
+     cout<<"false";
+  return 0;
+      
+}
