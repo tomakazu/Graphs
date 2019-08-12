@@ -1,0 +1,68 @@
+#include <iostream>
+#include<bits/stdc++.h>
+using namespace std;
+class Edge{
+    public:
+    int src,dest,weight;
+};
+bool compare(Edge E1,Edge E2){
+	return E1.weight<E2.weight;
+}
+int getParent(int v,int *parent){
+	if(parent[v] == v)
+		return v;
+	return getParent(parent[v],parent);
+}
+int main()
+{
+  int V, E, tempX, tempY;
+  cin >> V >> E;
+  Edge* input = new Edge[E];  
+  /*
+
+  	   Write Your Code Here
+	   Complete the Rest of the Program
+	   You have to Print the output yourself
+	 
+  */
+  //INPUT ARRAY
+    for(int i=0;i<E;i++){
+        int f,s,w;
+        cin>>f>>s>>w;
+        input[i].src = f;
+        input[i].weight = w;
+        input[i].dest = s;
+        
+    }
+    sort(input,input+E,compare);
+	int count = 0;
+	int *parentArray = new int[V];
+	for(int i=0;i<V;i++){
+		parentArray[i] = i;
+	}
+	Edge *output = new Edge[V-1];
+	int i=0;
+    while(count<V-1){
+		Edge currentEdge = input[i];
+		
+		int srcParent = getParent(currentEdge.src,parentArray);
+		int destParent = getParent(currentEdge.dest,parentArray);
+		
+		if(srcParent!=destParent){
+				output[count] = currentEdge;
+				count++;
+				parentArray[destParent] = srcParent;
+		}	
+		i++;
+	}
+	for(int i=0;i<V-1;i++){
+		if(output[i].src>output[i].dest){
+			cout<<output[i].dest<<" "<<output[i].src<<" "<<output[i].weight<<endl;
+		}
+		else{
+			cout<<output[i].src<<" "<<output[i].dest<<" "<<output[i].weight<<endl;
+		}
+	} 
+    delete [] output;
+  return 0;
+}
