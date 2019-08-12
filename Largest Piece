@@ -1,0 +1,33 @@
+int helper(int n,char cake[NMAX][NMAX],bool **visited,int row,int col){
+	if(row>=n||col>=n||row<0||col<0||visited[row][col]==true){
+		return 0;
+	}
+	if(cake[row][col] == '1'){
+		visited[row][col] = true;
+		int p = 1 + helper(n,cake,visited,row+1,col)+helper(n,cake,visited,row,col-1)+helper(n,cake,visited,row,col+1)+
+                    helper(n,cake,visited,row-1,col);
+        return p;
+	}
+	return 0;
+}
+int solve(int n,char cake[NMAX][NMAX])
+{
+	// Write your code here .
+ 	bool **visited = new bool*[n];
+	for(int i=0;i<n;i++){
+ 		visited[i] = new bool[n];
+	}
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            visited[i][j] = false;
+        }
+    }
+	int ans = 0;
+	for(int i=0;i<n;i++){
+		for(int j=0;j<n;j++){
+		    if(cake[i][j]=='1'&&!visited[i][j])
+            ans = max(ans,helper(n,cake,visited,i,j));		
+		}
+	}
+	return ans;  
+}
