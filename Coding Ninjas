@@ -1,0 +1,37 @@
+//Given a NxM matrix containing Uppercase English Alphabets only. Your task is to tell if there is a path in the given matrix which makes the sentence “CODINGNINJA” .
+//There is a path from any cell to all its neighbouring cells. A neighbour may share an edge or a corner.
+//Only functions
+bool helper(char Graph[][MAXN],int N,int M,bool **visited,int row,int col,char c,string str){
+    if(row>=N||col>=M||row<0||col<0||visited[row][col]){
+        return false;
+    }
+    if(Graph[row][col]==c||str.empty()){
+        visited[row][col] = true;
+        return true;
+    }
+    c = str[0];
+    bool ans = helper(Graph,N,M,visited,row+1,col,c,str.substr(1)) + helper(Graph,N,M,visited,row,col+1,c,str.substr(1)) + helper(Graph,N,M,visited,row,col-1,c,str.substr(1))+helper(Graph,N,M,visited,row-1,col,c,str.substr(1))+helper(Graph,N,M,visited,row+1,col+1,c,str.substr(1))+
+        helper(Graph,N,M,visited,row-1,col-1,c,str.substr(1)) + helper(Graph,N,M,visited,row-1,col+1,c,str.substr(1)) + helper(Graph,N,M,visited,row+1,col-1,c,str.substr(1));
+}
+int solve(char Graph[][MAXN],int N, int M)
+{
+	// Write your code here.
+    bool **visited = new bool*[N];
+    for(int i=0;i<N;i++){
+        visited[i] = new bool[M];
+        for(int j=0;j<M;j++){
+            visited[i][j] = false;
+        }
+    
+    }   
+    string c = "CODINGNINJA";
+    bool ans;
+    for(int i=0;i<N;i++){
+        for(int j=0;j<M;j++){
+        ans = helper(Graph,N,M,visited,i,j,c[0],c.substr(1));        
+        }
+    }
+    if(ans)
+        return 1;
+    return 0;
+}
