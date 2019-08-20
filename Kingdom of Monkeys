@@ -1,0 +1,60 @@
+#include<bits/stdc++.h>
+const int mod = pow(10,9) + 7;
+using namespace std;
+#define ll long long int
+ll AllComponents(vector<ll>*edges,bool *visited,ll V,ll *array){
+	ll ans = 0;
+	ll sum;
+	queue<ll> curr_vertices;
+	for(ll i=0;i<V;i++){
+        ll d = i;
+    sum = 0;
+	curr_vertices.push(d);
+    visited[d] = true;
+	sum=array[d];
+    while(!curr_vertices.empty()){
+        d = curr_vertices.front();
+		curr_vertices.pop();
+		for(ll j=0;j<edges[d].size();j++){
+			if(!visited[edges[d][j]]){
+				curr_vertices.push(edges[d][j]);
+				visited[edges[d][j]] = true;
+				sum = array[edges[d][j]] + sum;
+                    }
+			    }
+            
+	        }    
+        if(sum>ans){
+            ans = sum;
+        }
+    }
+	
+	return ans;
+}
+int main()
+{
+	//code
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    ll t;
+    cin>>t;
+    while(t--){
+        int n,m;
+        cin>>n>>m;
+        vector<ll> *edges = new vector<ll>[n];
+        
+        for(ll i=0;i<m;i++){
+            ll xi,yi;
+            cin>>xi>>yi;
+            edges[xi-1].push_back(yi-1);
+            edges[yi-1].push_back(xi-1);
+        }
+        bool *visited = new bool[n]();
+        ll *array = new ll[n];
+        for(ll i=0;i<n;i++){
+            cin>>array[i];
+        }
+        cout<<AllComponents(edges,visited,n,array)<<endl;
+    }
+	return 0;
+}
