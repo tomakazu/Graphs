@@ -1,0 +1,66 @@
+#include<bits/stdc++.h>
+using namespace std;
+class Road{
+    public:
+    int src,dest,weight;
+};
+bool compare(Road E1,Road E2){
+	return E1.weight<E2.weight;
+}
+int getParent(int v,int *parent){
+	if(parent[v] == v)
+		return v;
+	return getParent(parent[v],parent);
+}
+int main()
+{
+	//code
+    int t;
+    cin>>t;
+    int j =1;
+    while(t--){
+    	int n,m,a;
+    	cin>>n>>m>>a;
+    	Road *roads = new Road[m];
+		for(int i=0;i<m;i++){
+    		int x,y,c;
+    		cin>>x>>y>>c;
+    		roads[i].dest = y-1;
+    		roads[i].src = x-1;
+    		roads[i].weight = c;
+		}
+		int *parent = new int[n];
+		for(int i=0;i<n;i++){
+			parent[i] = i;
+		}
+		sort(roads,roads+m,compare);
+		vector<int> output;
+		int i=0,count=0,noPlanes = 0;
+		while(count<n-1&&i<m){
+			Road currRoad = roads[i];
+			int parentSrc = getParent(currRoad.src,parent);
+			int parentDest = getParent(currRoad.dest,parent);
+			if(parentSrc!=parentDest){
+				if(currRoad.weight<a){
+					parent[parentSrc] = parent[parentDest];
+					output.push_back(currRoad.weight);
+					count++;
+				}
+			}
+            
+			i++;
+		}
+		bool* visited = new bool[n]();
+        for(int i=0;i<n;i++){
+			int k = getParent(parent[i],parent);
+			if(!visited[k]){
+				visited[k] = true;
+				noPlanes++;
+			}
+		}
+		int ans = accumulate(output.begin(),output.end(),0) + noPlanes*a; 
+       	cout<<"Case #"<<j<<": "<<ans<<" "<<noPlanes<<endl; 
+    j++;	
+	}
+	return 0;
+}
