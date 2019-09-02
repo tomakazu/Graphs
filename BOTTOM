@@ -1,0 +1,87 @@
+#include<bits/stdc++.h>
+using namespace std;
+void forwardDFS(vector<int>*edges, int src,stack<int>& vrt,bool *visited){
+	visited[src] = true;
+	for(int i=0;i<edges[src].size();i++){
+		if(!visited[edges[src][i]]){
+			forwardDFS(edges,edges[src][i],vrt,visited);
+		}
+	}
+	vrt.push(src);
+}
+void reverseDFS(vector<int>* edgesT,int src,bool *visited,vector<int>&component){
+	visited[src]=true;
+	component.push_back(src);
+	for(int i=0;i<edgesT[src].size();i++){
+		if(!visited[edgesT[src][i]]){
+			reverseDFS(edgesT,edgesT[src][i],visited,component);
+		}
+	}
+}
+bool check(vector<int> component,vector<int>* edges){
+	for(int i=0;i<component.size();i++){
+		int element = component[i];
+		for(int j=0;j<edges[element].size();j++){
+			if(count(component.begin(),component.end(),edges[element][j]))
+			{
+				continue;	
+			}
+			else{
+				return false;
+			}	
+		}
+	}
+	return true;
+}
+void findBottom(vector<int>*edges,vector<int>*edgesT,int n){
+	bool *visited = new bool[n]();
+	stack<int> vertices;
+	for(int i=0;i<n;i++){
+		if(!visited[i])
+			forwardDFS(edges,i,vertices,visited);
+	}
+    vector<int> output;
+	memset(visited,false,n*sizeof(bool));
+	while(!vertices.empty()){
+		int element = vertices.top();
+		vertices.pop();
+		bool status = false;
+		if(!visited[element]){
+			vector<int> component;
+			reverseDFS(edgesT,element,visited,component);
+			status = check(component,edges);
+			if(status){
+			for(int i=0;i<component.size();i++){
+				output.push_back(component[i]);
+			}
+                
+		}
+	}
+    }
+    sort(output.begin(),output.end());
+    for(int k=0;k<output.size();k++){
+        cout<<output[k]+1<<" ";
+    }
+}
+int main(){
+	while(1){
+		int n,m;
+		cin>>n;
+		if(n==0)
+			break;
+		cin>>m;	
+		vector<int> *edges = new vector<int>[n];
+		vector<int> *edgesT = new vector<int>[n];
+		for(int i=0;i<m;i++){
+			int x,y;
+			cin>>x>>y;
+			edges[x-1].push_back(y-1);
+			edgesT[y-1].push_back(x-1);
+		}
+		//find all possible components using Kosaraju
+		findBottom(edges,edgesT,n);
+		
+	}
+	
+	return 0;
+}
